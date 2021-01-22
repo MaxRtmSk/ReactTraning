@@ -14,75 +14,93 @@ export class SignUp extends React.Component {
       passwordError: false,
       loginError: false,
       passwordConfirmationError: false,
+      errorMessages: [],
     };
   }
 
   render() {
     return (
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-        }}
-      >
-        <input
-          className={this.state.loginError ? "input-error" : ""}
-          name="login"
-          type="text"
-          value={this.state.login}
-          onChange={(e) => {
-            this.setState({
-              login: e.target.value,
-            });
-          }}
-        />
-        <input
-          className={this.state.passwordError && "input-error"}
-          name="password"
-          type="password"
-          value={this.state.password}
-          onChange={(e) => {
-            this.setState({
-              password: e.target.value,
-            });
-          }}
-        />
-        <input
-          className={this.state.passwordConfirmationError && "input-error"}
-          name="passwordConfirmation"
-          type="password"
-          value={this.state.passwordConfirmation}
-          onChange={(e) => {
-            this.setState({
-              passwordConfirmation: e.target.value,
-            });
-          }}
-        />
-        <button
-          onClick={() => {
-            const nextState = {
-              loginError: this.state.login.trim() === "",
-              passwordError: this.state.password === "",
-              passwordConfirmationError:
-                this.state.passwordConfirmation !== this.state.password,
-            };
-
-            this.setState(nextState); //делаем всегда setState чтобы последний инпут переставал быть красным если пароли совпадают 
-
-            //переписываем if если полей в инпуте много 
-            if (
-              //функция Object.valuse забирает только значения из объекта, и все в одном пордяке загоняет в массив (в каком порядке мы не знаем). В результате этого вызова будет массив из true и false. Если в массиве есть хотябы один true, тогда не нужно вызывать функцию onSignUp
-              Object.values(nextState).includes(true) //находим встроенной функцие хоть один true, в начале добавляем ! потомучто в этом случае не нужно вызывать. Это говорит что если нету не одной ошибки все ошибки false то тогда вызваем 
-            ) {
-              this.props.onSignUp({
-                login: this.state.login,
-                password: this.state.password,
-              });
-            }
+      <div>
+        {this.state.errorMessages.length ? (<ul className="error-messages">{this.state.errorMessages.map((message, index) => <li key={index}>{message}</li>)}</ul>) : null} 
+        {/* даём ключ li, это может быть либо  индекс в массиве либо само сообщение, чтобы реакт не ругался*/}
+        {/* {this.state.errorMessages.length && ... */}
+        {/* нельзя использовать сокращение потомучто вернулся ноль, ставим вопрос а если нет то возрашаем null*/}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
           }}
         >
-          Submit
-        </button>
-      </form>
+          <input
+            className={this.state.loginError ? "input-error" : ""}
+            name="login"
+            type="text"
+            value={this.state.login}
+            onChange={(e) => {
+              this.setState({
+                login: e.target.value,
+              });
+            }}
+          />
+          <input
+            className={this.state.passwordError && "input-error"}
+            name="password"
+            type="password"
+            value={this.state.password}
+            onChange={(e) => {
+              this.setState({
+                password: e.target.value,
+              });
+            }}
+          />
+          <input
+            className={this.state.passwordConfirmationError && "input-error"}
+            name="passwordConfirmation"
+            type="password"
+            value={this.state.passwordConfirmation}
+            onChange={(e) => {
+              this.setState({
+                passwordConfirmation: e.target.value,
+              });
+            }}
+          />
+          <button
+            onClick={() => {
+              const nextState = {
+                loginError: this.state.login.trim() === "",
+                passwordError: this.state.password === "",
+                passwordConfirmationError:
+                  this.state.passwordConfirmation !== this.state.password,
+                errorMessages: [],
+              };
+
+              this.setState(nextState);
+
+              if (nextState.loginError) {
+                nextState.errorMessages.push("Логин должен быть заполнен");
+              }
+
+              if (nextState.passwordError) {
+                nextState.errorMessages.push("Пароль должен быть введен");
+              }
+
+              if (nextState.passwordConfirmationError) {
+                nextState.errorMessages.push(
+                  "Потверждение должно совпадать с паролем"
+                );
+              }
+
+              if (!Object.values(nextState).includes(true)) {
+                this.props.onSignUp({
+                  login: this.state.login,
+                  password: this.state.password,
+                });
+              }
+            }}
+          >
+            Submit
+          </button>
+        </form>
+      </div>
     );
   }
 }
