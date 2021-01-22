@@ -18,13 +18,19 @@ export class SignUp extends React.Component {
     };
   }
 
+  onChange = (e) => {
+    //часты приём при работе с инпутами больше нигде так делать не стоит. Это посмотреть какой name у таргета e.tagret.name. И дальше мы воспользуемся тем что к js можно обрашатся через фигурные скобки к объекту
+    const name = e.target.name;
+    const nextState = {};
+    nextState[name] = e.target.value;
+
+    this.setState(nextState);
+  }
+
   render() {
     return (
       <div>
         {this.state.errorMessages.length ? (<ul className="error-messages">{this.state.errorMessages.map((message, index) => <li key={index}>{message}</li>)}</ul>) : null} 
-        {/* даём ключ li, это может быть либо  индекс в массиве либо само сообщение, чтобы реакт не ругался*/}
-        {/* {this.state.errorMessages.length && ... */}
-        {/* нельзя использовать сокращение потомучто вернулся ноль, ставим вопрос а если нет то возрашаем null*/}
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -35,33 +41,21 @@ export class SignUp extends React.Component {
             name="login"
             type="text"
             value={this.state.login}
-            onChange={(e) => {
-              this.setState({
-                login: e.target.value,
-              });
-            }}
+            onChange={this.onChange}
           />
           <input
             className={this.state.passwordError && "input-error"}
             name="password"
             type="password"
             value={this.state.password}
-            onChange={(e) => {
-              this.setState({
-                password: e.target.value,
-              });
-            }}
+            onChange={this.onChange}
           />
           <input
             className={this.state.passwordConfirmationError && "input-error"}
             name="passwordConfirmation"
             type="password"
             value={this.state.passwordConfirmation}
-            onChange={(e) => {
-              this.setState({
-                passwordConfirmation: e.target.value,
-              });
-            }}
+            onChange={this.onChange}
           />
           <button
             onClick={() => {
