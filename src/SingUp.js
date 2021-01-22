@@ -25,38 +25,47 @@ export class SignUp extends React.Component {
     nextState[name] = e.target.value;
 
     this.setState(nextState);
-  }
+  };
 
   render() {
     return (
       <div>
-        {this.state.errorMessages.length ? (<ul className="error-messages">{this.state.errorMessages.map((message, index) => <li key={index}>{message}</li>)}</ul>) : null} 
+        {this.state.errorMessages.length ? (
+          <ul className="error-messages">
+            {this.state.errorMessages.map((message, index) => (
+              <li key={index}>{message}</li>
+            ))}
+          </ul>
+        ) : null}
         <form
           onSubmit={(e) => {
             e.preventDefault();
           }}
         >
-          <input
-            className={this.state.loginError ? "input-error" : ""}
-            name="login"
-            type="text"
-            value={this.state.login}
-            onChange={this.onChange}
-          />
-          <input
-            className={this.state.passwordError && "input-error"}
-            name="password"
-            type="password"
-            value={this.state.password}
-            onChange={this.onChange}
-          />
-          <input
-            className={this.state.passwordConfirmationError && "input-error"}
-            name="passwordConfirmation"
-            type="password"
-            value={this.state.passwordConfirmation}
-            onChange={this.onChange}
-          />
+          {[
+            { name: "login", type: "text", errorStateKey: "loginError" },
+            {
+              name: "password",
+              type: "password",
+              errorStateKey: "passwordError",
+            },
+            {
+              name: "passwordConfirmation",
+              type: "password",
+              errorStateKey: "passwordConfirmationError",
+            },
+          ].map((inputParams) => (
+            <input
+              key={inputParams.name}
+              type={inputParams.type}
+              name={inputParams.name}
+              onChange={this.onChange}
+              value={this.state[inputParams.name]}
+              className={
+                this.state[inputParams.errorStateKey] ? "input-error" : ""
+              }
+            />
+          ))}
           <button
             onClick={() => {
               const nextState = {
