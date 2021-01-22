@@ -68,11 +68,10 @@ export class SignUp extends React.Component {
 
             this.setState(nextState); //делаем всегда setState чтобы последний инпут переставал быть красным если пароли совпадают 
 
-            //проверяем есть ли в nexState кто-то с true
+            //переписываем if если полей в инпуте много 
             if (
-              nextState.loginError ||
-              nextState.passwordError ||
-              nextState.passwordConfirmationError
+              //функция Object.valuse забирает только значения из объекта, и все в одном пордяке загоняет в массив (в каком порядке мы не знаем). В результате этого вызова будет массив из true и false. Если в массиве есть хотябы один true, тогда не нужно вызывать функцию onSignUp
+              Object.values(nextState).includes(true) //находим встроенной функцие хоть один true, в начале добавляем ! потомучто в этом случае не нужно вызывать. Это говорит что если нету не одной ошибки все ошибки false то тогда вызваем 
             ) {
               this.props.onSignUp({
                 login: this.state.login,
