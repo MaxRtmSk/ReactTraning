@@ -2,6 +2,8 @@ import { render } from "@testing-library/react";
 import React from "react";
 import ReactDOM from "react-dom";
 
+import './SingUp.scss'
+
 export class SignUp extends React.Component {
   constructor(psops) {
     super(psops);
@@ -23,6 +25,7 @@ export class SignUp extends React.Component {
         }}
       >
         <input
+          className={this.state.loginError ? "input-error" : ''}
           name="login"
           type="text"
           value={this.state.login}
@@ -33,6 +36,7 @@ export class SignUp extends React.Component {
           }}
         />
         <input
+          className={this.state.passwordError && "input-error"}
           name="password"
           type="password"
           value={this.state.password}
@@ -43,6 +47,7 @@ export class SignUp extends React.Component {
           }}
         />
         <input
+          className={this.state.passwordConfirmationError && "input-error"}
           name="passwordConfirmation"
           type="password"
           value={this.state.passwordConfirmation}
@@ -67,7 +72,7 @@ export class SignUp extends React.Component {
               hasError = true;
             }
 
-            if (this.state.passwordConfirmation === "") {
+            if (this.state.passwordConfirmation !== this.state.password) {
               nextState.passwordConfirmationError = true;
               hasError = true;
             }
