@@ -66,14 +66,14 @@ export class SignUp extends React.Component {
                 this.state.passwordConfirmation !== this.state.password,
             };
 
+            this.setState(nextState); //делаем всегда setState чтобы последний инпут переставал быть красным если пароли совпадают 
+
             //проверяем есть ли в nexState кто-то с true
             if (
               nextState.loginError ||
               nextState.passwordError ||
               nextState.passwordConfirmationError
             ) {
-              this.setState(nextState);
-            } else {
               this.props.onSignUp({
                 login: this.state.login,
                 password: this.state.password,
