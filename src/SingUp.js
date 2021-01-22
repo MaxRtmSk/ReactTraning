@@ -2,7 +2,7 @@ import { render } from "@testing-library/react";
 import React from "react";
 import ReactDOM from "react-dom";
 
-import './SingUp.scss'
+import "./SingUp.scss";
 
 export class SignUp extends React.Component {
   constructor(psops) {
@@ -25,7 +25,7 @@ export class SignUp extends React.Component {
         }}
       >
         <input
-          className={this.state.loginError ? "input-error" : ''}
+          className={this.state.loginError ? "input-error" : ""}
           name="login"
           type="text"
           value={this.state.login}
@@ -59,25 +59,19 @@ export class SignUp extends React.Component {
         />
         <button
           onClick={() => {
-            const nextState = {};
-            let hasError = false;
+            const nextState = {
+              loginError: this.state.login.trim() === "",
+              passwordError: this.state.password === "",
+              passwordConfirmationError:
+                this.state.passwordConfirmation !== this.state.password,
+            };
 
-            if (this.state.login.trim() === "") {
-              nextState.loginError = true;
-              hasError = true;
-            }
-
-            if (this.state.password === "") {
-              nextState.passwordError = true;
-              hasError = true;
-            }
-
-            if (this.state.passwordConfirmation !== this.state.password) {
-              nextState.passwordConfirmationError = true;
-              hasError = true;
-            }
-
-            if (hasError) {
+            //проверяем есть ли в nexState кто-то с true
+            if (
+              nextState.loginError ||
+              nextState.passwordError ||
+              nextState.passwordConfirmationError
+            ) {
               this.setState(nextState);
             } else {
               this.props.onSignUp({
