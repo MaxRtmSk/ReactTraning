@@ -11,10 +11,12 @@ export class SignUp extends React.Component {
       login: "",
       password: "",
       passwordConfirmation: "",
-      passwordError: false,
-      loginError: false,
-      passwordConfirmationError: false,
-      errorMessages: [],
+      error: {
+        password: false,
+        login: false,
+        password: false,
+        messages: [],
+      },
     };
   }
 
@@ -30,9 +32,9 @@ export class SignUp extends React.Component {
   render() {
     return (
       <div>
-        {this.state.errorMessages.length ? (
+        {this.state.error.messages.length ? (
           <ul className="error-messages">
-            {this.state.errorMessages.map((message, index) => (
+            {this.state.error.messages.map((message, index) => (
               <li key={index}>{message}</li>
             ))}
           </ul>
@@ -46,63 +48,59 @@ export class SignUp extends React.Component {
             {
               name: "login",
               type: "text",
-              errorStateKey: "loginError",
               text: "Логин",
             },
             {
               name: "password",
               type: "password",
-              errorStateKey: "passwordError",
               text: "Пароль",
             },
             {
               name: "passwordConfirmation",
               type: "password",
-              errorStateKey: "passwordConfirmationError",
               text: "Подтверждение пароля",
             },
           ].map((inputParams) => (
-            <>
+            <React.Fragment key={inputParams.name}>
               <label htmlFor={inputParams.name}>{inputParams.text}</label>
               <input
-                key={inputParams.name}
                 type={inputParams.type}
                 name={inputParams.name}
                 onChange={this.onChange}
                 value={this.state[inputParams.name]}
                 className={
-                  this.state[inputParams.errorStateKey] ? "input-error" : ""
+                  this.state.error[inputParams.name] ? "input-error" : ""
                 }
               />
-            </>
+            </ React.Fragment>
           ))}
           <button
             onClick={() => {
-              const nextState = {
-                loginError: this.state.login.trim() === "",
-                passwordError: this.state.password === "",
-                passwordConfirmationError:
+              const nextError = {
+                login: this.state.login.trim() === "",
+                password: this.state.password === "",
+                passwordConfirmation:
                   this.state.passwordConfirmation !== this.state.password,
-                errorMessages: [],
+                messages: [],
               };
 
-              this.setState(nextState);
-
-              if (nextState.loginError) {
-                nextState.errorMessages.push("Логин должен быть заполнен");
+              if (nextError.login) {
+                nextError.messages.push("Логин должен быть заполнен");
               }
 
-              if (nextState.passwordError) {
-                nextState.errorMessages.push("Пароль должен быть введен");
+              if (nextError.password) {
+                nextError.messages.push("Пароль должен быть введен");
               }
 
-              if (nextState.passwordConfirmationError) {
-                nextState.errorMessages.push(
+              if (nextError.passwordConfirmation) {
+                nextError.messages.push(
                   "Потверждение должно совпадать с паролем"
                 );
               }
 
-              if (!Object.values(nextState).includes(true)) {
+              this.setState({ error: nextError });
+
+              if (!Object.values(nextError).includes(true)) {
                 this.props.onSignUp({
                   login: this.state.login,
                   password: this.state.password,
