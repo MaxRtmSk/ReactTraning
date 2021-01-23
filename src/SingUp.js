@@ -43,28 +43,38 @@ export class SignUp extends React.Component {
           }}
         >
           {[
-            { name: "login", type: "text", errorStateKey: "loginError" },
+            {
+              name: "login",
+              type: "text",
+              errorStateKey: "loginError",
+              text: "Логин",
+            },
             {
               name: "password",
               type: "password",
               errorStateKey: "passwordError",
+              text: "Пароль",
             },
             {
               name: "passwordConfirmation",
               type: "password",
               errorStateKey: "passwordConfirmationError",
+              text: "Подтверждение пароля",
             },
           ].map((inputParams) => (
-            <input
-              key={inputParams.name}
-              type={inputParams.type}
-              name={inputParams.name}
-              onChange={this.onChange}
-              value={this.state[inputParams.name]}
-              className={
-                this.state[inputParams.errorStateKey] ? "input-error" : ""
-              }
-            />
+            <>
+              <label htmlFor={inputParams.name}>{inputParams.text}</label>
+              <input
+                key={inputParams.name}
+                type={inputParams.type}
+                name={inputParams.name}
+                onChange={this.onChange}
+                value={this.state[inputParams.name]}
+                className={
+                  this.state[inputParams.errorStateKey] ? "input-error" : ""
+                }
+              />
+            </>
           ))}
           <button
             onClick={() => {
