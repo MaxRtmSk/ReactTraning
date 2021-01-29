@@ -23,9 +23,9 @@ export class NumberValidation extends React.Component {
             let number = e.target.value.substr(0, 6)
             console.log(number)
             if (number == '+37529' || number == '+37533' || number == '+37544' || number == '+37525') {
-              this.setState({ number: this.value, error: false });
+              this.setState({ number: e.target.value, error: false });
             } else {
-              this.setState({ number: this.value, error: true });
+              this.setState({ number: e.target.value, error: true });
             }
           }}
         />
